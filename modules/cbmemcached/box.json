@@ -1,0 +1,28 @@
+{
+    "name"              : "Memcached Provider Module for Coldbox",
+    "version"           : "1.0.0",
+    "author"            : "Jon Clausen <jon_clausen@silowebworks.com>",
+    "slug"              : "cbmemcached",
+    "type"              : "modules",
+    "location"          : "http://oss.silowebworks.com.s3.amazonaws.com/coldbox-modules/cbmemcached/@build.version@/cbmemcached-@build.version@.zip",
+    "homepage"          : "https://github.com/jclausen/cbMemcached",
+    "documentation"     : "https://github.com/jclausen/cbMemcached/wiki",
+    "repository"        : { "type" : "git", "url" : "https://github.com/jclausen/cbMemcached" },
+    "shortDescription"  : "Allows for the use of Memcached as a Cachebox provider",
+    "license"           : [ 
+        { 
+            "type" : "Apache2", 
+            "url" : "http://www.apache.org/licenses/LICENSE-2.0.html" 
+        } 
+    ],
+    "contributors"      : [
+        "Aaron Greenlee"
+    ],
+    "engines"   : [
+        { "type" : "railo", "version" : ">4.1" },
+        { "type" : "adobe", "version" : ">9.02" },
+    ],
+    "dependencies"  :{
+        "cbjavaloader" : ">=1.0.0"
+    }
+}

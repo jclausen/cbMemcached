@@ -1,0 +1,18 @@
+{
+    "name":"memcached-provider",
+    "version":"1.0.0",
+    "slug":"module-template",
+    "private":false,
+    "dependencies":{
+        "coldbox":"4.2.0+00002",
+        "cbjavaloader":"^1.3.0+00007"
+    },
+    "devDependencies":{
+        "testbox":"2.3.0+00044"
+    },
+    "installPaths":{
+        "coldbox":"coldbox",
+        "testbox":"testbox",
+        "cbjavaloader":"modules/cbjavaloader"
+    }
+}
