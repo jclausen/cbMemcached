@@ -1,6 +1,6 @@
 {
     "name"              : "Memcached Provider Module for Coldbox",
-    "version"           : "1.0.0",
+    "version"           : "@release.number@+@build.number@",
     "author"            : "Jon Clausen <jon_clausen@silowebworks.com>",
     "slug"              : "cbmemcached",
     "type"              : "modules",
@@ -20,7 +20,7 @@
     ],
     "engines"   : [
         { "type" : "railo", "version" : ">4.1" },
-        { "type" : "adobe", "version" : ">9.02" },
+        { "type" : "adobe", "version" : ">9.02" }
     ],
     "dependencies"  :{
         "cbjavaloader" : ">=1.0.0"
