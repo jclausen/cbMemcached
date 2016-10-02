@@ -3,7 +3,7 @@
 	<!-- Version: UPDATE ON EACH RELEASE AS NEEDED -->
 	<property name="project.name" 		value="cbmemcached" />
 	<property name="module.name" 		value="cbmemcached" />
-	<property name="project.version" 	value="1.0.0"/>
+	<property name="project.version" 	value="1.0.1"/>
 	<property name="groupID" 			value="silowebworks" />
 
 	<condition property="isTravis" else="false">
