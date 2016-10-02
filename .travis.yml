@@ -10,6 +10,8 @@ sudo: required
 dist: trusty
 
 before_install:
+  - echo $FORGEBOX_USERNAME
+  - echo $FORGEBOX_PASSWORD
   # CommandBox Keys
   - sudo apt-key adv --keyserver keys.gnupg.net --recv 6DA70622
   - sudo echo "deb http://integration.stg.ortussolutions.com/artifacts/debs/noarch /" | sudo tee -a
