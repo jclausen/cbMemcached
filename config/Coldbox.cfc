@@ -109,6 +109,11 @@ component{
 				 {
 					provider : 'modules.cbmemcached.models.MemcachedColdboxProvider'
 				    ,properties : {}
+				},
+				"integration-tests" :
+				 {
+					provider : 'modules.cbmemcached.models.MemcachedColdboxProvider'
+				    ,properties : {}
 				}
 	        },        
 	        // Register all event listeners here, they are created in the specified order
