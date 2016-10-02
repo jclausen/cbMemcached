@@ -41,7 +41,7 @@ component extends="MemcachedProviderTest"{
 		
 		// Create Provider
 		// Find a way to make the "MemcachedApp" mapping dynamic for people (like Brad) running this in the root :)
-		cache = getMockBox().createMock("MemcachedProvider.models.MemcachedColdboxProvider").init();
+		cache = getMockBox().createMock("cbmemcached.models.MemcachedColdboxProvider").init();
 		// Decorate it
 		cache.setConfiguration( config );
 		cache.setCacheFactory( mockFactory );

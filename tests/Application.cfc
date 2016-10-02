@@ -22,7 +22,7 @@ component{
 	this.mappings[ "/tests" ] = getDirectoryFromPath( getCurrentTemplatePath() );
 	rootPath = REReplaceNoCase( this.mappings[ "/tests" ], "tests(\\|/)", "" );
 	this.mappings[ "/root" ]   = rootPath;
-	this.mappings[ "/cbmongodb" ] = COLDBOX_APP_ROOT_PATH & "modules/cbmongodb";
+	this.mappings[ "/cbmemcached" ] = COLDBOX_APP_ROOT_PATH & "modules/cbmemcached";
 	this.mappings[ "/cbjavaloader" ] = COLDBOX_APP_ROOT_PATH & "modules/cbjavaloader";
 	
 	// application start

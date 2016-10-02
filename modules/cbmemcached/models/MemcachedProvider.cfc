@@ -10,7 +10,7 @@ This CacheBox provider communicates with a single Memcached node or a
 cluster of Memcached nodes for a distributed and highly scalable cache store.
 
 */
-component name="MemcachedProvider" serializable="false" implements="coldbox.system.cache.ICacheProvider" accessors=true{
+component name="cbmemcached" serializable="false" implements="coldbox.system.cache.ICacheProvider" accessors=true{
 	property name="JavaLoader" inject="Loader@cbjavaloader";
 
 	/**
@@ -860,7 +860,7 @@ component name="MemcachedProvider" serializable="false" implements="coldbox.syst
 
 		for( var configServer in servers  ){
 			var address = listToArray( configServer, ":" );
-			if( !arraylen( address ) > 1 ) throw( "MemcachedProviderException", "The address provided ( #server# ) does not contain an address/port configuration" );
+			if( !arraylen( address ) > 1 ) throw( "cbmemcachedException", "The address provided ( #server# ) does not contain an address/port configuration" );
 			var socketAddr = createObject("java", "java.net.InetSocketAddress" ).init( address[ 1 ], address[ 2 ] );
 			formattedServers.add( socketAddr );
 		}

@@ -107,7 +107,7 @@ component{
 	        caches = {
 	        	"template" :
 				 {
-					provider : 'modules.memcached-provider.models.MemcachedColdboxProvider'
+					provider : 'modules.cbmemcached.models.MemcachedColdboxProvider'
 				    ,properties : {}
 				}
 	        },        

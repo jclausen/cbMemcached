@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <project name="build" basedir="../" default="build">
 	<!-- Version: UPDATE ON EACH RELEASE AS NEEDED -->
-	<property name="project.name" 		value="cachebox-memcached" />
-	<property name="module.name" 		value="cachebox-memcached" />
+	<property name="project.name" 		value="cbmemcached" />
+	<property name="module.name" 		value="cbmemcached" />
 	<property name="project.version" 	value="3.2.1.2"/>
 	<property name="groupID" 			value="silowebworks" />
 
