@@ -1,0 +1,47 @@
+language: java
+
+branches:
+  only:
+  - development
+  - master
+
+sudo: required
+
+dist: trusty
+
+before_install:
+  # CommandBox Keys
+  - sudo apt-key adv --keyserver keys.gnupg.net --recv 6DA70622
+  - sudo echo "deb http://integration.stg.ortussolutions.com/artifacts/debs/noarch /" | sudo tee -a
+    /etc/apt/sources.list.d/commandbox.list
+
+install:
+  # Install Commandbox
+  - sudo apt-get update && sudo apt-get --assume-yes install commandbox
+  # Test that the box binary is available and ready for our tests
+  - sudo box version
+
+script:
+  - sudo ant -DisTravis=true -f workbench/build.xml
+  
+before_deploy:
+  - mkdir s3deploy
+  - cp -r ./artifacts/cbmemcached/* ./s3deploy/
+  - rm -f ./s3deploy/box-repo.json
+
+deploy:
+  on:
+    branch: 
+      - master
+  skip_cleanup: true
+  provider: s3
+  #AWS Credentials need to be set in Travis
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_ACCESS_SECRET
+  bucket: "oss.silowebworks.com"
+  local-dir: s3deploy
+  upload-dir: oldbox-modules/cbmemcached
+  acl: public_read
+
+after_deploy:
+  - cd $TRAVIS_BUILD_DIR/build && box forgebox login username=$FORGEBOX_USERNAME password=$FORGEBOX_PASSWORD && box forgebox publish
