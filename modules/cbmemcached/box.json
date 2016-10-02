@@ -1,5 +1,5 @@
 {
-    "name"              : "Memcached Provider Module for Coldbox",
+    "name"              : "cbMemcached",
     "version"           : "@release.number@+@build.number@",
     "author"            : "Jon Clausen <jon_clausen@silowebworks.com>",
     "slug"              : "cbmemcached",
@@ -8,7 +8,7 @@
     "homepage"          : "https://github.com/jclausen/cbMemcached",
     "documentation"     : "https://github.com/jclausen/cbMemcached/wiki",
     "repository"        : { "type" : "git", "url" : "https://github.com/jclausen/cbMemcached" },
-    "shortDescription"  : "Allows for the use of Memcached as a Cachebox provider",
+    "shortDescription"  : "Memcached Provider Module for Coldbox/Cachebox",
     "license"           : [ 
         { 
             "type" : "Apache2", 
