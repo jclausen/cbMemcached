@@ -12,14 +12,12 @@ the Railo Engine for ColdBox applications.
 */
 component name="MemcachedColdboxProvider" serializable="false" extends="MemcachedProvider" implements="coldbox.system.cache.IColdboxApplicationCache"{
 
-	property name="JavaLoader" inject="Loader@cbjavaloader";
-
 	MemcachedColdboxProvider function init() output=false{
 		super.init();
 		
 		// Cache Prefixes
-		this.VIEW_CACHEKEY_PREFIX 	= "railo_view-";
-		this.EVENT_CACHEKEY_PREFIX 	= "railo_event-";
+		this.VIEW_CACHEKEY_PREFIX 	= "mc_view-";
+		this.EVENT_CACHEKEY_PREFIX 	= "mc_event-";
 		
 		// URL Facade Utility
 		instance.eventURLFacade		= CreateObject("component","coldbox.system.cache.util.EventURLFacade").init(this);

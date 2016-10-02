@@ -84,6 +84,12 @@ component name="cbmemcached" serializable="false" implements="coldbox.system.cac
 		
 		return this;
 	}
+
+	function onDIComplete(){
+		if( isNull( getJavaLoader() ) ){		
+			setJavaloader( application.wirebox.getInstance( "Loader@cbjavaloader" ) );	
+		}
+	}
 	
 	/**
     * get the cache name
@@ -166,14 +172,14 @@ component name="cbmemcached" serializable="false" implements="coldbox.system.cac
 				if( isNull( getJavaLoader() ) ) application.cbController.getWirebox().autowire(this);
 
 				try{
-					var ConnectionFactoryBuilder = Javaloader.create( "net.spy.memcached.ConnectionFactoryBuilder" );
-					var FailureMode = Javaloader.create( "net.spy.memcached.FailureMode" );
+					var ConnectionFactoryBuilder = getJavaLoader().create( "net.spy.memcached.ConnectionFactoryBuilder" );
+					var FailureMode = getJavaLoader().create( "net.spy.memcached.FailureMode" );
 					//if we only have one server set our failover to retry to the current node
 					if( arrayLen( instance.config.servers ) == 1 ){					
 						ConnectionFactoryBuilder.setFailureMode( FailureMode.RETRY );
 					}
 					var ConnectionFactory = ConnectionFactoryBuilder.build();
-					arrayAppend( clients, Javaloader.create( "net.spy.memcached.MemcachedClient" ).init( ConnectionFactory, instance.config.servers ) );
+					arrayAppend( clients, getJavaLoader().create( "net.spy.memcached.MemcachedClient" ).init( ConnectionFactory, instance.config.servers ) );
 				} catch( Any e ){
 					instance.logger.error("There was an error creating the Memcached Client: #e.message# #e.detail#", e );
 					throw(message='There was an error creating the Memcached Client', detail=e.message & " " & e.detail);
@@ -450,43 +456,13 @@ component name="cbmemcached" serializable="false" implements="coldbox.system.cac
     		}  else {			
 	    		local.object = g.get();	
     		}
-			
-			// item is no longer in cache, return null
-			if( isNull( local.object ) ){
-				return;
-			}
-			
-			// return if not our JSON
-			if( !isJSON( local.object ) ){
-				return local.object;
-			}
-			
-			// inflate our object from JSON
 
-			local.inflatedElement = deserializeJSON( local.object );
-			
-			
-			// Simple values like 123 might appear to be JSON, but not a struct
-			if(!isStruct(local.inflatedElement)) {
-				return local.object;
-			}
-
-
-			// Is simple or not?
-			if( structKeyExists( local.inflatedElement, "isSimple" ) and local.inflatedElement.isSimple ){
-				if( getConfiguration().updateStats ) updateObjectStats( arguments.objectKey, duplicate( local.inflatedElement ) );
-				return local.inflatedElement.data;
-			}
-
-			// else we deserialize and return
-			if( structKeyExists( local.inflatedElement, "data" ) ){
-				local.inflatedElement.data = instance.converter.deserializeGeneric(binaryObject=local.inflatedElement.data);
-				if( getConfiguration().updateStats ) updateObjectStats( arguments.objectKey, duplicate( local.inflatedElement ) );	
-				return local.inflatedElement.data;
-			}
+    		if( isNull( local.object ) ){
+    			return;
+    		}
 
 			// who knows what this is?
-			return local.object;
+			return getParsedResult( ARGUMENTS.objectKey, local.object );
 		}
 		catch(any e) {
 			
@@ -505,10 +481,10 @@ component name="cbmemcached" serializable="false" implements="coldbox.system.cac
 	any function getMulti( 
 		required array objectKeys
 	){
-		var map = Javaloader.create( "java.util.ArrayList");
+		//TODO:  Figure out why using the Javaloader on the second request to this method throws an error in our tests
+		var map = createObject( "java", "java.util.ArrayList" );
 		map.addAll( arguments.objectKeys );
 
-		if( structK )
 		var f = getMemcachedClient().asyncGetBulk( objectKeys );
 	
 		var i = 0;
@@ -519,9 +495,17 @@ component name="cbmemcached" serializable="false" implements="coldbox.system.cac
     	if( !g.isDone() ) g.cancel( true );
 
     	var result = f.get();
+    	var parsedResult = {};
 
-    	writeDump(var=result,top=1);
-    	abort;
+    	for( var cacheKey in structKeyArray( result ) ){
+    		if( !isNull( result[ cacheKey ] ) ){			
+	    		parsedResult[ cacheKey ] = getParsedResult( cacheKey, result[ cacheKey ] );	
+    		} else {			
+	    		parsedResult[ cacheKey ] = javacast( "null", 0);
+    		}
+    	}
+
+    	return parsedResult;
 	}
 	
 	/**
@@ -889,6 +873,44 @@ component name="cbmemcached" serializable="false" implements="coldbox.system.cac
     	//Throw(message=arguments.message, detail=local.detail);
     	
     	return this;
+    }
+
+    private any function getParsedResult( required string objectKey ,required string cacheObject ){
+    		// item is no longer in cache, return null
+			if( isNull( ARGUMENTS.CacheObject ) ){
+				return;
+			}
+			
+			// return if not our JSON
+			if( !isJSON( ARGUMENTS.CacheObject ) ){
+				return ARGUMENTS.CacheObject;
+			}
+			
+			// inflate our object from JSON
+
+			local.inflatedElement = deserializeJSON( ARGUMENTS.CacheObject );
+			
+			
+			// Simple values like 123 might appear to be JSON, but not a struct
+			if(!isStruct(local.inflatedElement)) {
+				return ARGUMENTS.CacheObject;
+			}
+
+
+			// Is simple or not?
+			if( structKeyExists( local.inflatedElement, "isSimple" ) and local.inflatedElement.isSimple ){
+				if( getConfiguration().updateStats ) updateObjectStats( arguments.objectKey, duplicate( local.inflatedElement ) );
+				return local.inflatedElement.data;
+			}
+
+			// else we deserialize and return
+			if( structKeyExists( local.inflatedElement, "data" ) ){
+				local.inflatedElement.data = instance.converter.deserializeGeneric(binaryObject=local.inflatedElement.data);
+				if( getConfiguration().updateStats ) updateObjectStats( arguments.objectKey, duplicate( local.inflatedElement ) );	
+				return local.inflatedElement.data;
+			}
+
+			return local.inflatedElement;
     }
 
 }
